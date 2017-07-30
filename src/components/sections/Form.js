@@ -1,15 +1,27 @@
 import React from 'react'
 
 class Form extends React.Component {
+  constructor(props) {
+    super(props)
+    
+    this.state = {
+      term: ""
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+  
   handleChange(event) {
-    this.setState({searchTerm: event.target.value})
+    this.setState({term: event.target.value})
+    
   }
   
   handleSubmit(event) {
     event.preventDefault()
-    this.props.searchTerm(this.state.title)
+    this.props.term(this.state.title)
     return false
   }
+  
   
   render() {
     return (
@@ -25,7 +37,7 @@ class Form extends React.Component {
                      placeholder="Search term"
                      required/>
             </div>
-           
+            
             <button type="submit"
                     className="btn btn-info">Search
             </button>
