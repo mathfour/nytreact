@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import './App.css'
 import Form from './components/sections/Form'
 import helpers from './components/utils/helpers'
+import Result from "./components/sections/Result";
 
 class App extends Component {
   
@@ -57,7 +58,7 @@ class App extends Component {
         </p>
         {/*<Child title={this.state.title}/>*/}
         <Form term={this.setSearchTerms}/>
-        
+       <Result/>
         <div className="App-footer">
           Created by Bon Crowder, 2017
         </div>

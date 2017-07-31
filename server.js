@@ -39,45 +39,55 @@ db.once("open", function() {
 // -------------------------------------------------
 
 // Main "/" Route. This will redirect the user to our rendered React application
-app.get("/", function(req, res) {
+// app.get("/", function(req, res) {
+//   res.sendFile(__dirname + "/public/index.html");
+// });
+//
+// app.get("/api/saved", function(req, res) {
+//
+//   Articles.find({}).exec(function(err, doc) {
+//
+//     if (err) {
+//       console.log(err);
+//     }
+//     else {
+//       res.send(doc);
+//     }
+//   });
+// });
+
+app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-app.get("/api/saved", function(req, res) {
-  
-  Articles.find({}).exec(function(err, doc) {
-    
-    if (err) {
-      console.log(err);
-    }
-    else {
-      res.send(doc);
+app.get("/saved-articles", function (req, res) {
+  Articles.find({}).sort({ "title": 1 }).exec(function (error, doc) {
+    if (error) {
+      res.send(error);
+    } else {
+      res.json(doc);
     }
   });
 });
 
-// app.post("/api/saved", function(req, res) {
+app.post("/save-article", function (req, res) {
+  var newArticle = new Articles(req.body);
+  newArticle.save(function (error, doc) {
+    if (error) {
+      res.send(error);
+    } else {
+      res.json(doc._id);
+    }
+  });
+});
 
-  // var clickID = req.body.clickID;
-  // var clicks = parseInt(req.body.clicks);
-
-  // Note how this route utilizes the findOneAndUpdate function to update the clickCount
-  // { upsert: true } is an optional object we can pass into the findOneAndUpdate method
-  // If included, Mongoose will create a new document matching the description if one is not found
-  // Articles.findOneAndUpdate({
-  //   articleID: clickID
-  // }, {
-  //   $set: {
-  //     clicks: clicks
-  //   }
-  // }, { upsert: true }).exec(function(err) {
-  //
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   else {
-  //     res.send("Updated Click Count!");
-  //   }
-  // });
-// });
-
+app.delete("/delete-article", function (req, res) {
+  var deleteID = req.param("id");
+  Articles.findByIdAndRemove(deleteID, function (err, data) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
